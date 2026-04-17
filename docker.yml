@@ -1,0 +1,22 @@
+name: Docker CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.Docke_password }}" | docker login -u "${{ secrets.Docker_username }}" --password-stdin
+
+    - name: Build Docker Image
+      run: docker build -t ${{ secrets.Docker_username }}/santosh-app ./app
+
+    - name: Push Docker Image
+      run: docker push ${{ secrets.Docker_username }}/santosh-app
